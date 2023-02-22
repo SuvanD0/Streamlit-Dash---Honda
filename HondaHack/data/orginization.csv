@@ -1,0 +1,27 @@
+organization_id,type,pricing_mode
+41,Healthcare,Organization Paid
+22,Other,Rider Paid
+1,Other,Rider Paid
+12,Other,Rider Paid
+2,Senior,Organization Paid
+26,Senior,Organization Paid
+37,Senior,Organization Paid
+43,Senior,Organization Paid
+42,Senior,Split Payment
+39,Senior,Organization Paid
+8,Student,Organization Paid
+9,Student,Organization Paid
+13,Student,Split Payment
+20,Student,Organization Paid
+14,Student,Split Payment
+24,Student,Organization Paid
+30,Student,Split Payment
+40,Student,Split Payment
+17,Workforce,Organization Paid
+34,Workforce,Split Payment
+27,Workforce,Split Payment
+35,Workforce,Split Payment
+21,Workforce,Organization Paid
+32,Workforce,Split Payment
+33,Workforce,Organization Paid
+38,Workforce,Split Payment
