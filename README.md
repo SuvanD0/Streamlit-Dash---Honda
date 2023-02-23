@@ -1,4 +1,3 @@
-# Streamlit-Dash---Honda
 
 # Hackathon Project ReadMe
 
