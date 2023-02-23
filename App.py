@@ -105,8 +105,8 @@ else:
         dist_data['trip_distance_km'] = dist_data['trip_distance_miles']*1.60934
         fig = px.bar(dist_data, x='weekday', y='trip_distance_km', labels={'trip_distance_km':'Distance Traveled (km)'})
         fig.update_layout(
-            width=900,
-            height=500,
+            width=500,
+            height=300,
         )
         st.plotly_chart(fig)
 
