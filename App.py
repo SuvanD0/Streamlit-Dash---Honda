@@ -6,23 +6,23 @@ import time
 import plotly.express as px
 import pydeck as pdk
 
-# Load data
-trip_summary_df = pd.read_csv("data/trip_summary.csv")
-df_vehicle = pd.read_csv("data/vehicle.csv")
-df_tripReq = pd.read_csv("data/trip_request.csv")
-route_df = pd.read_csv("data/route.csv")
-vehicle_match = pd.read_csv("data/vehicleMatch.csv")
-
-merged_df = pd.read_csv("data/Final_Data.csv")
-
-
-
 st.set_page_config(layout="wide")
-
 # set margins for left and right columns
 left_margin = "10%"
 right_margin = "10%"
 
+@st.cache
+def load_data():
+    trip_summary_df = pd.read_csv("data/trip_summary.csv")
+    df_vehicle = pd.read_csv("data/vehicle.csv")
+    df_tripReq = pd.read_csv("data/trip_request.csv")
+    route_df = pd.read_csv("data/route.csv")
+    vehicle_match = pd.read_csv("data/vehicleMatch.csv")
+    merged_df = pd.read_csv("data/Final_Data.csv")
+    return trip_summary_df, df_vehicle, df_tripReq, route_df, vehicle_match, merged_df
+
+trip_summary_df, df_vehicle, df_tripReq, route_df, vehicle_match, merged_df = load_data()
+merged_df = merged_df.rename(columns={'carbon emissions grams per mile\xa0': 'carbon emissions grams per mile'})
 
 # Define list of valid organization IDs
 valid_org_ids = [96, 245, 221, 195, 45, 37, 2, 1, 117, 187]
@@ -194,9 +194,39 @@ else:
                     st.write(f"You want to purchase {recommendation}")
             else:
                 st.write('')
-    
 
 
     
+
+    # Calculate the average and total carbon emissions per vehicle
+    avg_carbon_emissions_per_trip = merged_df_filtered.groupby('vehicle id')['carbon emissions grams per mile'].mean()
+    total_carbon_emissions = merged_df_filtered.groupby('vehicle id')['carbon emissions grams per mile'].sum()
+
+    # Filter the DataFrame to include only vehicles with non-zero emissions
+    merged_df_filtered = merged_df_filtered[merged_df_filtered['carbon emissions grams per mile'] > 0]
+
+    # Create a dropdown menu to select the chart type
+    chart_type_selection = st.selectbox('Select Chart Type:', ['Average Emissions', 'Total Emissions'])
+
+    if chart_type_selection == 'Average Emissions':
+        # Calculate the average carbon emissions per vehicle
+        avg_carbon_emissions_per_vehicle = merged_df_filtered.groupby('vehicle id')['carbon emissions grams per mile'].mean()
+
+        # Create a histogram for the average carbon emissions per vehicle
+        avg_emissions_hist = px.histogram(avg_carbon_emissions_per_vehicle, x='carbon emissions grams per mile', nbins=20, orientation='h')
+        avg_emissions_hist.update_layout(xaxis_title='Carbon Emissions (grams per mile)', yaxis_title='Vehicle ID')
+        st.plotly_chart(avg_emissions_hist)
+
+    else:
+        # Calculate the total carbon emissions per vehicle
+        total_carbon_emissions_per_vehicle = merged_df_filtered.groupby('vehicle id')['carbon emissions grams per mile'].sum()
+
+        # Create a histogram for the total carbon emissions per vehicle
+        total_emissions_hist = px.histogram(total_carbon_emissions_per_vehicle, x='carbon emissions grams per mile', nbins=20, orientation='h')
+        total_emissions_hist.update_layout(xaxis_title='Carbon Emissions (grams per mile)', yaxis_title='Vehicle ID')
+        st.plotly_chart(total_emissions_hist)
+
+
+
 
 
